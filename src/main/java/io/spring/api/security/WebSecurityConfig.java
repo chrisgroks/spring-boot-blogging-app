@@ -34,29 +34,31 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable()
-        .cors()
-        .and()
-        .exceptionHandling()
-        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.OPTIONS).permitAll()
-            .requestMatchers("/graphiql").permitAll()
-            .requestMatchers("/graphql").permitAll()
-            .requestMatchers(HttpMethod.GET, "/articles/feed").authenticated()
-            .requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
-            .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags").permitAll()
-            .anyRequest().authenticated()
-        );
-
-    http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
-    return http.build();
+    return http.csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .exceptionHandling(
+            ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            authorize ->
+                authorize
+                    .requestMatchers(HttpMethod.OPTIONS)
+                    .permitAll()
+                    .requestMatchers("/graphiql")
+                    .permitAll()
+                    .requestMatchers("/graphql")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/feed")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.POST, "/users", "/users/login")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+        .build();
   }
 
   @Bean
