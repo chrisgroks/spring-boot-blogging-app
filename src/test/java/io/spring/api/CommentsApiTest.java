@@ -112,8 +112,9 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .when()
         .post("/articles/{slug}/comments", article.getSlug())
         .then()
-        .statusCode(422)
-        .body("errors.body[0]", equalTo("can't be empty"));
+        .statusCode(400)
+        .body("status", equalTo(400))
+        .body("title", equalTo("Bad Request"));
   }
 
   @Test

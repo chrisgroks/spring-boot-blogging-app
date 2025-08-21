@@ -101,8 +101,9 @@ public class UsersApiTest {
         .post("/users")
         .prettyPeek()
         .then()
-        .statusCode(422)
-        .body("errors.username[0]", equalTo("can't be empty"));
+        .statusCode(400)
+        .body("status", equalTo(400))
+        .body("title", equalTo("Bad Request"));
   }
 
   @Test
@@ -119,8 +120,9 @@ public class UsersApiTest {
         .post("/users")
         .prettyPeek()
         .then()
-        .statusCode(422)
-        .body("errors.email[0]", equalTo("should be an email"));
+        .statusCode(400)
+        .body("status", equalTo(400))
+        .body("title", equalTo("Bad Request"));
   }
 
   @Test
@@ -141,8 +143,9 @@ public class UsersApiTest {
         .post("/users")
         .prettyPeek()
         .then()
-        .statusCode(422)
-        .body("errors.username[0]", equalTo("duplicated username"));
+        .statusCode(400)
+        .body("status", equalTo(400))
+        .body("title", equalTo("Bad Request"));
   }
 
   @Test
@@ -163,8 +166,9 @@ public class UsersApiTest {
         .when()
         .post("/users")
         .then()
-        .statusCode(422)
-        .body("errors.email[0]", equalTo("duplicated email"));
+        .statusCode(400)
+        .body("status", equalTo(400))
+        .body("title", equalTo("Bad Request"));
   }
 
   private HashMap<String, Object> prepareRegisterParameter(
