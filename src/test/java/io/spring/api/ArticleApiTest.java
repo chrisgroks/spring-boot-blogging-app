@@ -29,21 +29,21 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest({ArticleApi.class})
-@Import({WebSecurityConfig.class, JacksonCustomizations.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ArticleApiTest extends TestWithCurrentUser {
   @Autowired private MockMvc mvc;
 
-  @MockBean private ArticleQueryService articleQueryService;
+  @MockitoBean private ArticleQueryService articleQueryService;
 
-  @MockBean private ArticleRepository articleRepository;
+  @MockitoBean private ArticleRepository articleRepository;
 
-  @MockBean ArticleCommandService articleCommandService;
+  @MockitoBean ArticleCommandService articleCommandService;
 
   @Override
   @BeforeEach
