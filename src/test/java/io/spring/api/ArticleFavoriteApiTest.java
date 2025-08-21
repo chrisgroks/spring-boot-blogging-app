@@ -25,21 +25,21 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(ArticleFavoriteApi.class)
-@Import({WebSecurityConfig.class, JacksonCustomizations.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ArticleFavoriteApiTest extends TestWithCurrentUser {
   @Autowired private MockMvc mvc;
 
-  @MockBean private ArticleFavoriteRepository articleFavoriteRepository;
+  @MockitoBean private ArticleFavoriteRepository articleFavoriteRepository;
 
-  @MockBean private ArticleRepository articleRepository;
+  @MockitoBean private ArticleRepository articleRepository;
 
-  @MockBean private ArticleQueryService articleQueryService;
+  @MockitoBean private ArticleQueryService articleQueryService;
 
   private Article article;
 
