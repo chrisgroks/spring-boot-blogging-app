@@ -154,6 +154,21 @@
         limit #{page.queryLimit}
     </select>
 
+    <select id="searchArticles" resultMap="articleId">
+        <include refid="selectArticleIds" />
+        <where>
+            A.title LIKE '%' || #{query} || '%' OR A.body LIKE '%' || #{query} || '%'
+        </where>
+        order by A.created_at desc
+        limit #{page.offset}, #{page.limit}
+    </select>
+
+    <select id="countSearchArticles" resultType="java.lang.Integer">
+        select count(DISTINCT A.id)
+        from articles A
+        where A.title LIKE '%' || #{query} || '%' OR A.body LIKE '%' || #{query} || '%'
+    </select>
+
     <resultMap id="articleId" type="string">
         <id javaType="string" column="articleId"/>
     </resultMap>

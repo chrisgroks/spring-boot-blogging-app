@@ -227,4 +227,51 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
+
+  @Test
+  public void should_search_articles_by_title() {
+    Article searchableArticle =
+        new Article("How to train your dragon", "desc", "body content", Arrays.asList("tutorial"), user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragon", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "How to train your dragon");
+  }
+
+  @Test
+  public void should_search_articles_by_body() {
+    Article searchableArticle =
+        new Article("Random title", "desc", "This article talks about dragons and magic", Arrays.asList("fantasy"), user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragons", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "Random title");
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() {
+    Article article1 = new Article("First dragon article", "desc", "body", Arrays.asList("test"), user.getId());
+    Article article2 = new Article("Second dragon article", "desc", "body", Arrays.asList("test"), user.getId());
+    articleRepository.save(article1);
+    articleRepository.save(article2);
+
+    ArticleDataList firstPage = queryService.findArticlesBySearch("dragon", new Page(0, 1), user);
+    Assertions.assertEquals(firstPage.getCount(), 2);
+    Assertions.assertEquals(firstPage.getArticleDatas().size(), 1);
+
+    ArticleDataList secondPage = queryService.findArticlesBySearch("dragon", new Page(1, 1), user);
+    Assertions.assertEquals(secondPage.getCount(), 2);
+    Assertions.assertEquals(secondPage.getArticleDatas().size(), 1);
+  }
+
+  @Test
+  public void should_return_empty_results_for_no_matches() {
+    ArticleDataList searchResults = queryService.findArticlesBySearch("nonexistent", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 0);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 0);
+  }
 }
