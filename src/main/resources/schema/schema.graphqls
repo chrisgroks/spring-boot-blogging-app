@@ -8,6 +8,7 @@ type Query {
         before: String,
         authoredBy: String
         favoritedBy: String
+        bookmarkedBy: String
         withTag: String
     ): ArticlesConnection
     me: User
@@ -31,6 +32,8 @@ type Mutation {
     updateArticle(slug: String!, changes: UpdateArticleInput!): ArticlePayload
     favoriteArticle(slug: String!): ArticlePayload
     unfavoriteArticle(slug: String!): ArticlePayload
+    bookmarkArticle(slug: String!): ArticlePayload
+    unbookmarkArticle(slug: String!): ArticlePayload
     deleteArticle(slug: String!): DeletionStatus
 
     ### Comment
@@ -52,6 +55,8 @@ type Article {
     description: String!
     favorited: Boolean!
     favoritesCount: Int!
+    bookmarked: Boolean!
+    bookmarksCount: Int!
     slug: String!
     tagList: [String],
     title: String!

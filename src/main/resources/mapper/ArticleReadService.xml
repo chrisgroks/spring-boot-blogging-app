@@ -34,6 +34,8 @@
         left join article_favorites AF on AF.article_id = A.id
         left join users AU on AU.id = A.user_id
         left join users AFU on AFU.id = AF.user_id
+        left join article_bookmarks AB on AB.article_id = A.id
+        left join users ABU on ABU.id = AB.user_id
     </sql>
 
     <select id="findById" resultMap="transfer.data.articleData">
@@ -56,6 +58,9 @@
             <if test="favoritedBy != null">
                 AND AFU.username = #{favoritedBy}
             </if>
+            <if test="bookmarkedBy != null">
+                AND ABU.username = #{bookmarkedBy}
+            </if>
         </where>
         order by A.created_at desc
         limit #{page.offset}, #{page.limit}
@@ -70,6 +75,8 @@
         left join article_favorites AF on AF.article_id = A.id
         left join users AU on AU.id = A.user_id
         left join users AFU on AFU.id = AF.user_id
+        left join article_bookmarks AB on AB.article_id = A.id
+        left join users ABU on ABU.id = AB.user_id
         <where>
             <if test="tag != null">
                 T.name = #{tag}
@@ -79,6 +86,9 @@
             </if>
             <if test="favoritedBy != null">
                 AND AFU.username = #{favoritedBy}
+            </if>
+            <if test="bookmarkedBy != null">
+                AND ABU.username = #{bookmarkedBy}
             </if>
         </where>
     </select>
@@ -115,6 +125,9 @@
             </if>
             <if test="favoritedBy != null">
                 AND AFU.username = #{favoritedBy}
+            </if>
+            <if test="bookmarkedBy != null">
+                AND ABU.username = #{bookmarkedBy}
             </if>
             <if test='page.cursor != null and page.direction.name() == "NEXT"'>
                 AND A.created_at &lt; #{page.cursor}

@@ -156,6 +156,7 @@ public class ArticleDatafetcher {
               null,
               null,
               profile.getUsername(),
+              null,
               new CursorPageParameter<>(DateTimeCursor.parse(after), first, Direction.NEXT),
               current);
     } else {
@@ -164,6 +165,7 @@ public class ArticleDatafetcher {
               null,
               null,
               profile.getUsername(),
+              null,
               new CursorPageParameter<>(DateTimeCursor.parse(before), last, Direction.PREV),
               current);
     }
@@ -210,6 +212,7 @@ public class ArticleDatafetcher {
               null,
               profile.getUsername(),
               null,
+              null,
               new CursorPageParameter<>(DateTimeCursor.parse(after), first, Direction.NEXT),
               current);
     } else {
@@ -217,6 +220,7 @@ public class ArticleDatafetcher {
           articleQueryService.findRecentArticlesWithCursor(
               null,
               profile.getUsername(),
+              null,
               null,
               new CursorPageParameter<>(DateTimeCursor.parse(before), last, Direction.PREV),
               current);
@@ -250,6 +254,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       @InputArgument("authoredBy") String authoredBy,
       @InputArgument("favoritedBy") String favoritedBy,
+      @InputArgument("bookmarkedBy") String bookmarkedBy,
       @InputArgument("withTag") String withTag,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
@@ -265,6 +270,7 @@ public class ArticleDatafetcher {
               withTag,
               authoredBy,
               favoritedBy,
+              bookmarkedBy,
               new CursorPageParameter<>(DateTimeCursor.parse(after), first, Direction.NEXT),
               current);
     } else {
@@ -273,6 +279,7 @@ public class ArticleDatafetcher {
               withTag,
               authoredBy,
               favoritedBy,
+              bookmarkedBy,
               new CursorPageParameter<>(DateTimeCursor.parse(before), last, Direction.PREV),
               current);
     }
@@ -375,6 +382,8 @@ public class ArticleDatafetcher {
         .description(articleData.getDescription())
         .favorited(articleData.isFavorited())
         .favoritesCount(articleData.getFavoritesCount())
+        .bookmarked(articleData.isBookmarked())
+        .bookmarksCount(articleData.getBookmarksCount())
         .slug(articleData.getSlug())
         .tagList(articleData.getTagList())
         .title(articleData.getTitle())

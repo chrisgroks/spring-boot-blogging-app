@@ -51,10 +51,11 @@ public class ArticlesApi {
       @RequestParam(value = "limit", defaultValue = "20") int limit,
       @RequestParam(value = "tag", required = false) String tag,
       @RequestParam(value = "favorited", required = false) String favoritedBy,
+      @RequestParam(value = "bookmarked", required = false) String bookmarkedBy,
       @RequestParam(value = "author", required = false) String author,
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(
         articleQueryService.findRecentArticles(
-            tag, author, favoritedBy, new Page(offset, limit), user));
+            tag, author, favoritedBy, bookmarkedBy, new Page(offset, limit), user));
   }
 }
