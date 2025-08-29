@@ -227,4 +227,75 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
+
+  @Test
+  public void should_search_articles_by_title() {
+    Article dragonArticle =
+        new Article("How to train your dragon", "desc", "body content", Arrays.asList("fantasy"), user.getId());
+    articleRepository.save(dragonArticle);
+
+    Article springArticle =
+        new Article("Spring Boot Guide", "desc", "body content", Arrays.asList("tech"), user.getId());
+    articleRepository.save(springArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragon", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "How to train your dragon");
+  }
+
+  @Test
+  public void should_search_articles_by_body() {
+    Article dragonArticle =
+        new Article("Fantasy Story", "desc", "This story is about dragons and magic", Arrays.asList("fantasy"), user.getId());
+    articleRepository.save(dragonArticle);
+
+    Article springArticle =
+        new Article("Tech Guide", "desc", "This is a guide about Spring Boot", Arrays.asList("tech"), user.getId());
+    articleRepository.save(springArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragons", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "Fantasy Story");
+  }
+
+  @Test
+  public void should_search_articles_case_insensitive() {
+    Article dragonArticle =
+        new Article("Dragon Adventures", "desc", "Epic dragon story", Arrays.asList("fantasy"), user.getId());
+    articleRepository.save(dragonArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("DRAGON", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "Dragon Adventures");
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() {
+    for (int i = 0; i < 25; i++) {
+      Article article = new Article("Test Article " + i, "desc", "test content", Arrays.asList("test"), user.getId());
+      articleRepository.save(article);
+    }
+
+    ArticleDataList firstPage = queryService.findArticlesBySearch("test", new Page(0, 10), user);
+    Assertions.assertEquals(firstPage.getCount(), 26);
+    Assertions.assertEquals(firstPage.getArticleDatas().size(), 10);
+
+    ArticleDataList secondPage = queryService.findArticlesBySearch("test", new Page(10, 10), user);
+    Assertions.assertEquals(secondPage.getCount(), 26);
+    Assertions.assertEquals(secondPage.getArticleDatas().size(), 10);
+
+    ArticleDataList thirdPage = queryService.findArticlesBySearch("test", new Page(20, 10), user);
+    Assertions.assertEquals(thirdPage.getCount(), 26);
+    Assertions.assertEquals(thirdPage.getArticleDatas().size(), 6);
+  }
+
+  @Test
+  public void should_return_empty_results_for_no_matches() {
+    ArticleDataList searchResults = queryService.findArticlesBySearch("nonexistent", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 0);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 0);
+  }
 }
