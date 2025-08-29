@@ -17,7 +17,8 @@ public class MyBatisArticleBookmarkRepository implements ArticleBookmarkReposito
   private ArticleBookmarksReadService readService;
 
   @Autowired
-  public MyBatisArticleBookmarkRepository(ArticleBookmarkMapper mapper, ArticleBookmarksReadService readService) {
+  public MyBatisArticleBookmarkRepository(
+      ArticleBookmarkMapper mapper, ArticleBookmarksReadService readService) {
     this.mapper = mapper;
     this.readService = readService;
   }

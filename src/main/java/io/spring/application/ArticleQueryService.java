@@ -2,9 +2,9 @@ package io.spring.application;
 
 import static java.util.stream.Collectors.toList;
 
+import io.spring.application.data.ArticleBookmarkCount;
 import io.spring.application.data.ArticleData;
 import io.spring.application.data.ArticleDataList;
-import io.spring.application.data.ArticleBookmarkCount;
 import io.spring.application.data.ArticleFavoriteCount;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.ArticleBookmarksReadService;
@@ -102,8 +102,14 @@ public class ArticleQueryService {
   }
 
   public ArticleDataList findRecentArticles(
-      String tag, String author, String favoritedBy, String bookmarkedBy, Page page, User currentUser) {
-    List<String> articleIds = articleReadService.queryArticles(tag, author, favoritedBy, bookmarkedBy, page);
+      String tag,
+      String author,
+      String favoritedBy,
+      String bookmarkedBy,
+      Page page,
+      User currentUser) {
+    List<String> articleIds =
+        articleReadService.queryArticles(tag, author, favoritedBy, bookmarkedBy, page);
     int articleCount = articleReadService.countArticle(tag, author, favoritedBy, bookmarkedBy);
     if (articleIds.size() == 0) {
       return new ArticleDataList(new ArrayList<>(), articleCount);

@@ -193,7 +193,8 @@ public class ArticleQueryServiceTest extends DbTestBase {
     Assertions.assertEquals(recentArticles.getCount(), 1);
     Assertions.assertEquals(recentArticles.getArticleDatas().get(0).getId(), article.getId());
 
-    ArticleDataList notag = queryService.findRecentArticles("notag", null, null, null, new Page(), user);
+    ArticleDataList notag =
+        queryService.findRecentArticles("notag", null, null, null, new Page(), user);
     Assertions.assertEquals(notag.getCount(), 0);
   }
 
