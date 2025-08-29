@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.spring.infrastructure.mybatis.readservice.UserStatsReadService">
+    <select id="getUserStatsByUsername" resultType="io.spring.application.data.UserStatsData">
+        SELECT 
+            (SELECT COUNT(*) FROM articles WHERE user_id = u.id) as totalArticles,
+            (SELECT COUNT(*) FROM follows WHERE follow_id = u.id) as followersCount,
+            (SELECT COUNT(*) FROM follows WHERE user_id = u.id) as followingCount,
+            (SELECT COUNT(*) FROM article_favorites af 
+             JOIN articles a ON af.article_id = a.id 
+             WHERE a.user_id = u.id) as totalFavoritesReceived,
+            u.created_at as createdAt
+        FROM users u 
+        WHERE u.username = #{username}
+    </select>
+</mapper>

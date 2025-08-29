@@ -16,6 +16,7 @@ public class User {
   private String password;
   private String bio;
   private String image;
+  private String createdAt;
 
   public User(String email, String username, String password, String bio, String image) {
     this.id = UUID.randomUUID().toString();
