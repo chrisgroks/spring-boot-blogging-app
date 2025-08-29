@@ -8,11 +8,11 @@ import org.joda.time.DateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
-  private String id;
-  private String email;
+public class UserStatsData {
   private String username;
-  private String bio;
-  private String image;
+  private Integer totalArticles;
+  private Integer followersCount;
+  private Integer followingCount;
+  private Integer favoritesReceived;
   private DateTime createdAt;
 }

@@ -65,7 +65,7 @@ public class UsersApiTest {
 
     when(jwtService.toToken(any())).thenReturn("123");
     User user = new User(email, username, "123", "", defaultAvatar);
-    UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar);
+    UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar, user.getCreatedAt());
     when(userReadService.findById(any())).thenReturn(userData);
 
     when(userService.createUser(any())).thenReturn(user);
@@ -196,7 +196,7 @@ public class UsersApiTest {
     String password = "123";
 
     User user = new User(email, username, passwordEncoder.encode(password), "", defaultAvatar);
-    UserData userData = new UserData("123", email, username, "", defaultAvatar);
+    UserData userData = new UserData("123", email, username, "", defaultAvatar, new org.joda.time.DateTime());
 
     when(userRepository.findByEmail(eq(email))).thenReturn(Optional.of(user));
     when(userReadService.findByUsername(eq(username))).thenReturn(userData);
@@ -239,7 +239,7 @@ public class UsersApiTest {
     String password = "123";
 
     User user = new User(email, username, password, "", defaultAvatar);
-    UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar);
+    UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar, user.getCreatedAt());
 
     when(userRepository.findByEmail(eq(email))).thenReturn(Optional.of(user));
     when(userReadService.findByUsername(eq(username))).thenReturn(userData);

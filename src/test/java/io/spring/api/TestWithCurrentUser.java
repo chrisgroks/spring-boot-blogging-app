@@ -35,7 +35,7 @@ abstract class TestWithCurrentUser {
     when(userRepository.findByUsername(eq(username))).thenReturn(Optional.of(user));
     when(userRepository.findById(eq(user.getId()))).thenReturn(Optional.of(user));
 
-    userData = new UserData(user.getId(), email, username, "", defaultAvatar);
+    userData = new UserData(user.getId(), email, username, "", defaultAvatar, user.getCreatedAt());
     when(userReadService.findById(eq(user.getId()))).thenReturn(userData);
 
     token = "token";
