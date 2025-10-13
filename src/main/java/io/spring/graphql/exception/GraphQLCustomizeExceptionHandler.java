@@ -7,6 +7,7 @@ import graphql.GraphQLError;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
+import java.util.concurrent.CompletableFuture;
 import io.spring.api.exception.FieldErrorResource;
 import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.graphql.types.Error;
@@ -28,7 +29,7 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
       new DefaultDataFetcherExceptionHandler();
 
   @Override
-  public DataFetcherExceptionHandlerResult handleException(
+  public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(
       DataFetcherExceptionHandlerParameters handlerParameters) {
     if (handlerParameters.getException() instanceof InvalidAuthenticationException) {
       GraphQLError graphqlError =
@@ -37,7 +38,8 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
               .message(handlerParameters.getException().getMessage())
               .path(handlerParameters.getPath())
               .build();
-      return DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else if (handlerParameters.getException() instanceof ConstraintViolationException) {
       List<FieldErrorResource> errors = new ArrayList<>();
       for (ConstraintViolation<?> violation :
@@ -61,9 +63,10 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
               .path(handlerParameters.getPath())
               .extensions(errorsToMap(errors))
               .build();
-      return DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else {
-      return defaultHandler.handleException(handlerParameters);
+      return defaultHandler.onException(handlerParameters);
     }
   }
 
