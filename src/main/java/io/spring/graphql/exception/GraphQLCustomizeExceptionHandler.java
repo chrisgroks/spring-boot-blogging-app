@@ -66,7 +66,7 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
       return CompletableFuture.completedFuture(
           DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else {
-      return defaultHandler.onException(handlerParameters);
+      return CompletableFuture.completedFuture(defaultHandler.onException(handlerParameters));
     }
   }
 
