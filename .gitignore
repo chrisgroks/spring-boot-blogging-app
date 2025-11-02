@@ -24,3 +24,12 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Environment Variables ###
+.env
+.env.local
+sonar-scanner-*/
+
+sonar-scanner-*/
+.scannerwork/
+bin/
