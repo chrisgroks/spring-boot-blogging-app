@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id "com.netflix.dgs.codegen" version "5.0.6"
     id 'checkstyle'
+    id 'jacoco'
 }
 
 version = '0.0.1-SNAPSHOT'
@@ -70,6 +71,23 @@ tasks.named('clean') {
 }
 
 tasks.named('generateJava') {
-    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
-    packageName = 'io.spring.graphql' // The package name to use to generate sources
+    schemaPaths = ["${projectDir}/src/main/resources/schema"]
+    packageName = 'io.spring.graphql'
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
