@@ -227,4 +227,83 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
+
+  @Test
+  public void should_search_articles_by_title() {
+    Article searchableArticle = new Article(
+        "Spring Boot Tutorial", 
+        "Learn Spring Boot", 
+        "This is a comprehensive guide", 
+        Arrays.asList("spring", "tutorial"), 
+        user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("Spring", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "Spring Boot Tutorial");
+  }
+
+  @Test
+  public void should_search_articles_by_body() {
+    Article searchableArticle = new Article(
+        "Java Guide", 
+        "Programming tutorial", 
+        "This article covers Spring Boot framework in detail", 
+        Arrays.asList("java"), 
+        user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("framework", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "Java Guide");
+  }
+
+  @Test
+  public void should_search_articles_case_insensitive() {
+    Article searchableArticle = new Article(
+        "React Tutorial", 
+        "Frontend guide", 
+        "Learn React components", 
+        Arrays.asList("react"), 
+        user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("REACT", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() {
+    for (int i = 0; i < 25; i++) {
+      Article searchableArticle = new Article(
+          "Test Article " + i, 
+          "Description " + i, 
+          "Body content with searchable keyword", 
+          Arrays.asList("test"), 
+          user.getId());
+      articleRepository.save(searchableArticle);
+    }
+
+    ArticleDataList firstPage = queryService.findArticlesBySearch("searchable", new Page(0, 10), user);
+    Assertions.assertEquals(firstPage.getCount(), 25);
+    Assertions.assertEquals(firstPage.getArticleDatas().size(), 10);
+
+    ArticleDataList secondPage = queryService.findArticlesBySearch("searchable", new Page(10, 10), user);
+    Assertions.assertEquals(secondPage.getCount(), 25);
+    Assertions.assertEquals(secondPage.getArticleDatas().size(), 10);
+
+    ArticleDataList thirdPage = queryService.findArticlesBySearch("searchable", new Page(20, 10), user);
+    Assertions.assertEquals(thirdPage.getCount(), 25);
+    Assertions.assertEquals(thirdPage.getArticleDatas().size(), 5);
+  }
+
+  @Test
+  public void should_return_empty_when_no_search_results() {
+    ArticleDataList searchResults = queryService.findArticlesBySearch("nonexistent", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 0);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 0);
+  }
 }
