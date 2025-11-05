@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 
 @Getter
 @NoArgsConstructor
@@ -16,6 +17,7 @@ public class User {
   private String password;
   private String bio;
   private String image;
+  private DateTime createdAt;
 
   public User(String email, String username, String password, String bio, String image) {
     this.id = UUID.randomUUID().toString();
@@ -24,6 +26,7 @@ public class User {
     this.password = password;
     this.bio = bio;
     this.image = image;
+    this.createdAt = new DateTime();
   }
 
   public void update(String email, String username, String password, String bio, String image) {
