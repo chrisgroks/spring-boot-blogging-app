@@ -153,6 +153,71 @@ public class ArticlesApiTest extends TestWithCurrentUser {
         .statusCode(422);
   }
 
+  @Test
+  public void should_search_articles_success() throws Exception {
+    String query = "dragon";
+    
+    ArticleData articleData =
+        new ArticleData(
+            "123",
+            "how-to-train-your-dragon",
+            "How to train your dragon",
+            "Ever wonder how?",
+            "You have to believe in dragons",
+            false,
+            0,
+            new DateTime(),
+            new DateTime(),
+            asList("reactjs", "dragons"),
+            new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
+
+    io.spring.application.data.ArticleDataList articleDataList = 
+        new io.spring.application.data.ArticleDataList(asList(articleData), 1);
+
+    when(articleQueryService.findArticlesBySearch(eq(query), any(), any()))
+        .thenReturn(articleDataList);
+
+    given()
+        .header("Authorization", "Token " + token)
+        .param("q", query)
+        .param("offset", "0")
+        .param("limit", "20")
+        .when()
+        .get("/articles/search")
+        .then()
+        .statusCode(200)
+        .body("articles[0].title", equalTo("How to train your dragon"))
+        .body("articles[0].body", equalTo("You have to believe in dragons"))
+        .body("articlesCount", equalTo(1));
+
+    verify(articleQueryService).findArticlesBySearch(eq(query), any(), any());
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() throws Exception {
+    String query = "test";
+    
+    io.spring.application.data.ArticleDataList articleDataList = 
+        new io.spring.application.data.ArticleDataList(asList(), 0);
+
+    when(articleQueryService.findArticlesBySearch(eq(query), any(), any()))
+        .thenReturn(articleDataList);
+
+    given()
+        .header("Authorization", "Token " + token)
+        .param("q", query)
+        .param("offset", "10")
+        .param("limit", "5")
+        .when()
+        .get("/articles/search")
+        .then()
+        .statusCode(200)
+        .body("articles.size()", equalTo(0))
+        .body("articlesCount", equalTo(0));
+
+    verify(articleQueryService).findArticlesBySearch(eq(query), any(), any());
+  }
+
   private HashMap<String, Object> prepareParam(
       final String title, final String description, final String body, final List<String> tagList) {
     return new HashMap<String, Object>() {
