@@ -57,4 +57,14 @@ public class ArticlesApi {
         articleQueryService.findRecentArticles(
             tag, author, favoritedBy, new Page(offset, limit), user));
   }
+
+  @GetMapping(path = "search")
+  public ResponseEntity searchArticles(
+      @RequestParam(value = "q") String query,
+      @RequestParam(value = "offset", defaultValue = "0") int offset,
+      @RequestParam(value = "limit", defaultValue = "20") int limit,
+      @AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(
+        articleQueryService.findArticlesBySearch(query, new Page(offset, limit), user));
+  }
 }

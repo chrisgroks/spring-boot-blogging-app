@@ -12,8 +12,10 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ArticleQueryService;
+import io.spring.application.Page;
 import io.spring.application.article.ArticleCommandService;
 import io.spring.application.data.ArticleData;
+import io.spring.application.data.ArticleDataList;
 import io.spring.application.data.ProfileData;
 import io.spring.core.article.Article;
 import java.util.HashMap;
@@ -151,6 +153,68 @@ public class ArticlesApiTest extends TestWithCurrentUser {
         .prettyPeek()
         .then()
         .statusCode(422);
+  }
+
+  @Test
+  public void should_search_articles_success() throws Exception {
+    String query = "dragon";
+    ArticleData articleData =
+        new ArticleData(
+            "123",
+            "how-to-train-your-dragon",
+            "How to train your dragon",
+            "Ever wonder how?",
+            "You have to believe in dragons",
+            false,
+            0,
+            new DateTime(),
+            new DateTime(),
+            asList("reactjs", "dragons"),
+            new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
+
+    ArticleDataList articleDataList = new ArticleDataList(asList(articleData), 1);
+
+    when(articleQueryService.findArticlesBySearch(eq(query), any(Page.class), any()))
+        .thenReturn(articleDataList);
+
+    given()
+        .header("Authorization", "Token " + token)
+        .param("q", query)
+        .param("offset", 0)
+        .param("limit", 20)
+        .when()
+        .get("/articles/search")
+        .then()
+        .statusCode(200)
+        .body("articles.size()", equalTo(1))
+        .body("articles[0].title", equalTo("How to train your dragon"))
+        .body("articles[0].body", equalTo("You have to believe in dragons"))
+        .body("articlesCount", equalTo(1));
+
+    verify(articleQueryService).findArticlesBySearch(eq(query), any(Page.class), any());
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() throws Exception {
+    String query = "test";
+    ArticleDataList emptyResult = new ArticleDataList(asList(), 0);
+
+    when(articleQueryService.findArticlesBySearch(eq(query), any(Page.class), any()))
+        .thenReturn(emptyResult);
+
+    given()
+        .header("Authorization", "Token " + token)
+        .param("q", query)
+        .param("offset", 10)
+        .param("limit", 5)
+        .when()
+        .get("/articles/search")
+        .then()
+        .statusCode(200)
+        .body("articles.size()", equalTo(0))
+        .body("articlesCount", equalTo(0));
+
+    verify(articleQueryService).findArticlesBySearch(eq(query), any(Page.class), any());
   }
 
   private HashMap<String, Object> prepareParam(
