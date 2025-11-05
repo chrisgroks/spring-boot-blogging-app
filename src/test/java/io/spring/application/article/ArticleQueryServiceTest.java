@@ -227,4 +227,52 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
+
+  @Test
+  public void should_search_articles_by_title() {
+    Article searchableArticle =
+        new Article("How to train your dragon", "desc", "body", Arrays.asList("test"), user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragon", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getTitle(), "How to train your dragon");
+  }
+
+  @Test
+  public void should_search_articles_by_body() {
+    Article searchableArticle =
+        new Article("title", "desc", "This article is about dragons and magic", Arrays.asList("test"), user.getId());
+    articleRepository.save(searchableArticle);
+
+    ArticleDataList searchResults = queryService.findArticlesBySearch("dragons", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 1);
+    Assertions.assertEquals(searchResults.getArticleDatas().get(0).getBody(), "This article is about dragons and magic");
+  }
+
+  @Test
+  public void should_return_empty_results_for_no_matches() {
+    ArticleDataList searchResults = queryService.findArticlesBySearch("nonexistent", new Page(), user);
+    Assertions.assertEquals(searchResults.getCount(), 0);
+    Assertions.assertEquals(searchResults.getArticleDatas().size(), 0);
+  }
+
+  @Test
+  public void should_search_articles_with_pagination() {
+    for (int i = 0; i < 5; i++) {
+      Article searchableArticle =
+          new Article("Article " + i + " about dragons", "desc", "body", Arrays.asList("test"), user.getId());
+      articleRepository.save(searchableArticle);
+    }
+
+    ArticleDataList firstPage = queryService.findArticlesBySearch("dragons", new Page(0, 2), user);
+    Assertions.assertEquals(firstPage.getCount(), 5);
+    Assertions.assertEquals(firstPage.getArticleDatas().size(), 2);
+
+    ArticleDataList secondPage = queryService.findArticlesBySearch("dragons", new Page(2, 2), user);
+    Assertions.assertEquals(secondPage.getCount(), 5);
+    Assertions.assertEquals(secondPage.getArticleDatas().size(), 2);
+  }
 }
