@@ -34,7 +34,7 @@ Everything is configured and ready! Just need your SonarCloud credentials.
 # Edit .env in project root:
 SONAR_TOKEN=your_actual_token_here          # Paste your token
 SONAR_ORGANIZATION=your-actual-org-name     # Your org key from SonarCloud
-SONAR_PROJECT_KEY=spring-boot-blogging-app  # Keep this
+SONAR_PROJECT_KEY=reporting-dashboard  # Keep this
 ```
 
 ### 3. Test Locally
@@ -45,7 +45,7 @@ cd jenkins-demo
 ```
 
 That's it! Results will appear at:
-`https://sonarcloud.io/dashboard?id=spring-boot-blogging-app`
+`https://sonarcloud.io/dashboard?id=reporting-dashboard`
 
 ---
 

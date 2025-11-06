@@ -112,7 +112,7 @@ pipeline {
                     
                     # Run SonarScanner using SONAR_TOKEN from environment
                     ./sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner \
-                      -Dsonar.projectKey=chrisgroks_spring-boot-blogging-app \
+                      -Dsonar.projectKey=chrisgroks_reporting-dashboard \
                       -Dsonar.organization=chrisgroks \
                       -Dsonar.host.url=https://sonarcloud.io \
                       -Dsonar.token=${SONAR_TOKEN}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.spring.infrastructure.mybatis.mapper.ArticleFavoriteMapper">
+<mapper namespace="com.reportingdashboard.infrastructure.mybatis.mapper.ArticleFavoriteMapper">
     <insert id="insert">
         insert into article_favorites (article_id, user_id) values (#{articleFavorite.articleId}, #{articleFavorite.userId})
     </insert>
@@ -14,7 +14,7 @@
           from article_favorites AF
           where AF.article_id = #{articleId} and AF.user_id = #{userId}
     </select>
-    <resultMap id="articleFavorite" type="io.spring.core.favorite.ArticleFavorite">
+    <resultMap id="articleFavorite" type="com.reportingdashboard.core.favorite.ArticleFavorite">
         <result column="articleFavoriteArticleId" property="articleId"/>
         <result column="articleFavoriteUserId" property="userId"/>
     </resultMap>

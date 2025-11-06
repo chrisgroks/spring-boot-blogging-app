@@ -23,7 +23,7 @@ NC='\033[0m' # No Color
 JENKINS_URL="http://localhost:8080"
 JENKINS_USER="admin"
 JENKINS_PASSWORD="admin123"
-JOB_NAME="spring-boot-blogging-app"
+JOB_NAME="reporting-dashboard"
 REPO_PATH="../"
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"

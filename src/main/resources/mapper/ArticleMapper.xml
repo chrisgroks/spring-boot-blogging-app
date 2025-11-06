@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.spring.infrastructure.mybatis.mapper.ArticleMapper">
+<mapper namespace="com.reportingdashboard.infrastructure.mybatis.mapper.ArticleMapper">
     <insert id="insert">
         insert into articles(id, slug, title, description, body, user_id, created_at, updated_at)
         values(
@@ -54,7 +54,7 @@
         where A.id = #{id}
     </select>
 
-    <select id="findTag" resultType="io.spring.core.article.Tag">
+    <select id="findTag" resultType="com.reportingdashboard.core.article.Tag">
         select id, name from tags where name = #{tagName}
     </select>
 
@@ -63,7 +63,7 @@
         where A.slug = #{slug}
     </select>
 
-    <resultMap id="article" type="io.spring.core.article.Article">
+    <resultMap id="article" type="com.reportingdashboard.core.article.Article">
         <id column="articleId" property="id"/>
         <result column="articleUserId" property="userId"/>
         <result column="articleTitle" property="title"/>
@@ -75,7 +75,7 @@
         <collection property="tags" ofType="arraylist" resultMap="tag"/>
     </resultMap>
 
-    <resultMap id="tag" type="io.spring.core.article.Tag">
+    <resultMap id="tag" type="com.reportingdashboard.core.article.Tag">
         <id column="tagId" property="id"/>
         <result column="tagName" property="name"/>
     </resultMap>
