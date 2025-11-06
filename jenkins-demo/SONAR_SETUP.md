@@ -36,7 +36,7 @@ stage('SonarCloud Analysis') {
         // Run analysis
         sh '''
             ./sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
-              -Dsonar.projectKey=spring-boot-blogging-app \
+              -Dsonar.projectKey=reporting-dashboard \
               -Dsonar.organization=your-org-name \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.token=${SONAR_TOKEN}
@@ -79,7 +79,7 @@ Requires: `SONAR_TOKEN` environment variable
 ```bash
 SONAR_TOKEN=your_actual_token_here
 SONAR_ORGANIZATION=your-org-name
-SONAR_PROJECT_KEY=spring-boot-blogging-app
+SONAR_PROJECT_KEY=reporting-dashboard
 ```
 
 2. **Run local test**:
@@ -105,14 +105,14 @@ This script will:
 1. Go to [SonarCloud](https://sonarcloud.io)
 2. Sign in with GitHub
 3. Click **"+"** → **"Analyze new project"**
-4. Select `spring-boot-blogging-app`
+4. Select `reporting-dashboard`
 5. Note your **Organization Key** and **Project Key**
 
 ### 2. Update Configuration
 Edit `sonar-project.properties`:
 ```properties
 sonar.organization=YOUR-ORG-KEY
-sonar.projectKey=spring-boot-blogging-app
+sonar.projectKey=reporting-dashboard
 ```
 
 Edit `Jenkinsfile` line 117:

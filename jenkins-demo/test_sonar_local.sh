@@ -25,7 +25,7 @@ if [ ! -f "../.env" ]; then
     echo "Create a .env file in the project root with:"
     echo "  SONAR_TOKEN=your_token_here"
     echo "  SONAR_ORGANIZATION=your-org-name"
-    echo "  SONAR_PROJECT_KEY=spring-boot-blogging-app"
+    echo "  SONAR_PROJECT_KEY=reporting-dashboard"
     exit 1
 fi
 
