@@ -4,15 +4,15 @@
 
 ✅ **Jenkinsfile** - SonarCloud stage added using SonarScanner CLI  
 ✅ **sonar-project.properties** - Configuration file created (based on CI Templates)  
-⚠️ **Gradle plugins** - Commented out due to Gradle 7.4/Java 17 compatibility
+⚠️ **Gradle plugins** - Commented out due to Gradle 7.4/Java 23 compatibility
 
 ## The Issue
 
 This project uses:
-- **Java 17** (sourceCompatibility/targetCompatibility)
+- **Java 23** (sourceCompatibility/targetCompatibility)
 - **Gradle 7.4** (from wrapper)
 
-The problem: **Gradle 7.4 doesn't fully support Java 17 bytecode** for plugins like JaCoCo and SonarQube.
+The problem: **Gradle 7.4 doesn't fully support Java 23 bytecode** for plugins like JaCoCo and SonarQube.
 
 Error: `Unsupported class file major version 67`
 
@@ -57,7 +57,7 @@ This approach:
 Located at project root, contains:
 - Project key and organization
 - Source/test paths
-- Java version (17)
+- Java version (23)
 - Exclusions
 - Coverage report paths (for when JaCoCo is enabled)
 

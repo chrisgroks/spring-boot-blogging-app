@@ -6,9 +6,9 @@ import hudson.tools.InstallSourceProperty
 
 def instance = Jenkins.getInstance()
 
-// Configure JDK 17 (Zulu distribution to match GHA)
-def jdkInstaller = new JDKInstaller("17.0.1+12", true)
-def jdk = new JDK("JDK-17", "", [
+// Configure JDK 23 (Zulu distribution to match GHA)
+def jdkInstaller = new JDKInstaller("23.0.1+11", true)
+def jdk = new JDK("JDK-23", "", [
     new InstallSourceProperty([jdkInstaller])
 ])
 
@@ -16,6 +16,6 @@ def jdkDescriptor = instance.getDescriptor("hudson.model.JDK")
 jdkDescriptor.setInstallations(jdk)
 jdkDescriptor.save()
 
-println("JDK-17 configured successfully")
+println("JDK-23 configured successfully")
 
 instance.save()

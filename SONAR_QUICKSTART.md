@@ -114,7 +114,7 @@ The script downloads it automatically - check your internet connection
 - ✅ **Code Quality**: Bugs, vulnerabilities, code smells
 - ✅ **Security**: Security hotspots and vulnerabilities
 - ✅ **Maintainability**: Code complexity, duplications
-- ✅ **Java 17**: Configured for Java 17 source
+- ✅ **Java 23**: Configured for Java 23 source
 - ❌ **Coverage**: Not enabled (requires Gradle 8+ upgrade)
 
 ---
