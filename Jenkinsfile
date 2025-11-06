@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     tools {
-        // Configure JDK 23 (matches build.gradle sourceCompatibility)
-        jdk 'JDK-23'
+        // Configure JDK 21 (matches build.gradle sourceCompatibility)
+        jdk 'JDK-21'
     }
     
     triggers {
